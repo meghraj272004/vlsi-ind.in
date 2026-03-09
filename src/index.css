@@ -1,0 +1,112 @@
+@import "tailwindcss";
+
+:root {
+  --color-primary: #0a2540;
+  --color-accent: #d4af37;
+  --color-secondary: #00f2ff;
+  --bg-color: #050b14;
+  --text-color: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.6);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+.light {
+  --bg-color: #ffffff;
+  --text-color: #000000;
+  --text-muted: rgba(0, 0, 0, 0.7);
+  --border-color: rgba(0, 0, 0, 0.1);
+  --color-deep-bg: #ffffff;
+  --glass-bg: rgba(0, 0, 0, 0.05);
+  --glass-border: rgba(0, 0, 0, 0.1);
+}
+
+@theme {
+  --color-navy: var(--color-primary);
+  --color-gold: var(--color-accent);
+  --color-neon-blue: var(--color-secondary);
+  --color-deep-bg: var(--bg-color);
+  --color-muted: var(--text-muted);
+  --color-border-theme: var(--border-color);
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", sans-serif;
+}
+
+@layer base {
+  * {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+  }
+
+  body {
+    @apply bg-deep-bg text-[var(--text-color)] font-sans antialiased overflow-x-hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display tracking-tight text-[var(--text-color)];
+  }
+}
+
+@layer utilities {
+  .glass {
+    background-color: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-gold via-yellow-500 to-[#8a7015];
+  }
+
+  .animate-gradient-flow {
+    background-size: 200% 200%;
+    animation: gradient-flow 15s ease infinite;
+  }
+}
+
+@keyframes gradient-flow {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.perspective-1000 {
+  perspective: 1000px;
+}
