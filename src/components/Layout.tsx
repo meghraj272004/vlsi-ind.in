@@ -127,15 +127,25 @@ export const Footer = () => {
             Pioneering the future of semiconductor design. We provide end-to-end VLSI solutions,
             from RTL design to physical implementation, ensuring your silicon success.
           </p>
-          <div className="space-y-2 mb-8 text-sm text-muted">
-            <p className="flex items-center gap-2 hover:text-[var(--text-color)] transition-colors cursor-pointer">
-              <Mail className="w-4 h-4 text-neon-blue" />
+          <div className="space-y-4 mb-8 text-sm text-muted">
+            <a 
+              href="mailto:hr@vlsiind.in" 
+              className="flex items-center gap-3 hover:text-neon-blue transition-all group w-fit"
+            >
+              <div className="w-8 h-8 rounded-lg bg-neon-blue/10 flex items-center justify-center group-hover:bg-neon-blue/20 transition-colors">
+                <Mail className="w-4 h-4 text-neon-blue" />
+              </div>
               hr@vlsiind.in
-            </p>
-            <p className="flex items-center gap-2 hover:text-[var(--text-color)] transition-colors cursor-pointer">
-              <Phone className="w-4 h-4 text-gold" />
+            </a>
+            <a 
+              href="tel:+919187393632" 
+              className="flex items-center gap-3 hover:text-gold transition-all group w-fit"
+            >
+              <div className="w-8 h-8 rounded-lg bg-gold/10 flex items-center justify-center group-hover:bg-gold/20 transition-colors">
+                <Phone className="w-4 h-4 text-gold" />
+              </div>
               +91 9187393632
-            </p>
+            </a>
           </div>
           <div className="flex gap-4">
             {[

@@ -67,46 +67,47 @@ export const Contact = () => {
     setStatus("loading");
 
     try {
-      // Try backend first (saves to DB)
-      const res = await fetch("/api/contact", {
+      // Direct email relay — no backend API required
+      // This sends the data directly to hr@vlsiind.in via FormSubmit service
+      const response = await fetch("https://formsubmit.co/ajax/hr@vlsiind.in", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        headers: { 
+          "Content-Type": "application/json", 
+          "Accept": "application/json" 
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          service: formData.service,
+          domain: formData.domain || "Not specified",
+          message: formData.message,
+          _subject: `📩 New Website Inquiry: ${formData.service}`,
+          _template: "table", // Sends the email in a nice clean table
+          _captcha: "false"   // Disables the annoying captcha for smoother UX
+        }),
       });
-      const data = await res.json();
 
-      if (data.success) {
-        // Also silently relay to FormSubmit.co for email delivery (works after activation)
-        fetch("https://formsubmit.co/ajax/hr@vlsiind.in", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify({
-            name: formData.name,
-            email: formData.email,
-            service: formData.service,
-            domain: formData.domain || "Not specified",
-            message: formData.message,
-            _subject: `📩 New Inquiry: ${formData.service} from ${formData.name}`,
-            _template: "table",
-            _captcha: "false",
-          }),
-        }).catch(() => { }); // silent — don't block UI on email
+      const result = await response.json();
 
+      if (response.ok && result.success !== "false") {
         setStatus("success");
-        setResponseMsg(`Thank you, ${formData.name}! Your message has been received. Our team will review it and get back to you shortly.`);
+        setResponseMsg(`Success! Your message regarding ${formData.service} has been sent directly to our HR team.`);
         setFormData({ name: "", email: "", service: "RTL Design", domain: "", message: "" });
       } else {
-        throw new Error("Server error");
+        throw new Error("Relay failed");
       }
     } catch (err) {
-      // Ultimate fallback — open mailto: so the message is NEVER lost
-      const subject = encodeURIComponent(`Inquiry: ${formData.service} from ${formData.name}`);
+      console.error("Submission failed:", err);
+      
+      // Fallback: If the relay service is down, use the user's local email app
+      const subject = encodeURIComponent(`Inquiry: ${formData.service}`);
       const body = encodeURIComponent(
         `Name: ${formData.name}\nEmail: ${formData.email}\nService: ${formData.service}\nDomain: ${formData.domain || "Not specified"}\n\nMessage:\n${formData.message}`
       );
       window.open(`mailto:hr@vlsiind.in?subject=${subject}&body=${body}`, "_blank");
+      
       setStatus("success");
-      setResponseMsg(`Your email client has been opened with a pre-filled message. Please click Send to complete your inquiry.`);
+      setResponseMsg("Your email app has been opened. Please click 'Send' to complete your message to HR.");
     }
   };
 
